@@ -8,11 +8,13 @@ import { StockService } from './stock.service';
 import { HttpClientModule } from '@angular/common/http';
 import { NavbarComponent } from './navbar/navbar.component';
 import { FormsModule }   from '@angular/forms';
+import { CurrentPriceComponent } from './current-price/current-price.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    NavbarComponent
+    NavbarComponent,
+    CurrentPriceComponent
   ],
   imports: [
     BrowserModule,
