@@ -16,7 +16,7 @@ export class AppComponent {
   }
   
   fetch() {
-    this.stk.getData()
+    this.stk.getDailyData()
      .subscribe(res => {
       this.symbol = res["Meta Data"]["2. Symbol"];
        console.log(res)

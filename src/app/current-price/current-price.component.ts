@@ -16,7 +16,7 @@ export class CurrentPriceComponent implements OnInit {
   }
   
   fetch() {
-    this.stk.getData()
+    this.stk.getDailyData()
      .subscribe(res => {
       this.symbol = res["Meta Data"]["2. Symbol"];
       this.price = Number(res["Time Series (Daily)"]["2018-09-12"]["4. close"]).toFixed(2);
