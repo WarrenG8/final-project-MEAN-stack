@@ -9,19 +9,23 @@ import { HttpClientModule } from '@angular/common/http';
 import { NavbarComponent } from './navbar/navbar.component';
 import { FormsModule }   from '@angular/forms';
 import { CurrentPriceComponent } from './current-price/current-price.component';
+import { ChartsModule } from 'ng2-charts';
+import { ChartsComponent } from './charts/charts.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     NavbarComponent,
-    CurrentPriceComponent
+    CurrentPriceComponent,
+    ChartsComponent
   ],
   imports: [
     BrowserModule,
     HttpClientModule,
     ClarityModule,
     BrowserAnimationsModule,
-    FormsModule
+    FormsModule,
+    ChartsModule
   ],
   providers: [StockService],
   bootstrap: [AppComponent]
