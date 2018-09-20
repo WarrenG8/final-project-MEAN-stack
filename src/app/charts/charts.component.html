@@ -1,3 +1,48 @@
-<p>
-  charts works!
-</p>
+<header class="header-1">
+    <div class="branding">
+        <a href="..." class="nav-link">
+            <img src="src/app/images/b-logo.jpg">
+            <span class="title">Bloomberg Stock Lookup</span>
+        </a>
+    </div>
+    <form class="search">
+        <label for="search_input" (click)="searchSymbol()">
+            <input id="search_input" type="text" name="company" size="35" placeholder="Search by symbol..." [(ngModel)]="symbol" >
+        </label>
+    </form>
+    <!--<div class="header-actions">-->
+    <!--    <a href="..." class="nav-link nav-icon">-->
+    <!--        <clr-icon shape="cog"></clr-icon>-->
+    <!--    </a>-->
+    <!--</div>-->
+</header>
+<div class="row">
+    <div class="col-xs-3">
+        <span></span>
+    </div>
+    <div class="col-xs-6">
+        <span>
+            {{price}}<br>
+            {{symbol}}<br>
+            {{percentChange}}
+        </span>
+        <span>
+          <div class="row">
+          <div style="display: block;">
+            <canvas baseChart width="750px" height="550px" 
+                        [datasets]="lineChartData"
+                        [labels]="lineChartLabels"
+                        [options]="lineChartOptions"
+                        [colors]="lineChartColors"
+                        [legend]="lineChartLegend"
+                        [chartType]="lineChartType"
+                        (chartHover)="chartHovered($event)"
+                        (chartClick)="chartClicked($event)"></canvas>
+          </div>
+          </div>
+        </span>
+    </div>
+    <div class="col-xs-3">
+        <span></span>
+    </div>
+</div>

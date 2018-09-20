@@ -16,13 +16,13 @@ export class AppComponent {
   }
   
   fetch() {
-    this.stk.getDailyData()
-     .subscribe(res => {
-      this.symbol = res["Meta Data"]["2. Symbol"];
-       console.log(res)
-      }, err => {
-        console.log(err)
-      })
+    // this.stk.getDailyData()
+    // .subscribe(res => {
+    //   this.symbol = res["Meta Data"]["2. Symbol"];
+    //   console.log(res)
+    //   }, err => {
+    //     console.log(err)
+    //   })
   }
   
 }
