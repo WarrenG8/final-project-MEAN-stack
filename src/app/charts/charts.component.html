@@ -7,14 +7,14 @@
     </div>
     <form class="search">
         <label for="search_input" (click)="searchSymbol()">
-            <input id="search_input" type="text" name="company" size="35" placeholder="Search by symbol..." [(ngModel)]="symbol" >
+            <input id="search_input" type="text" name="symbol" size="25" placeholder="Search by symbol..." [(ngModel)]="symbol">
         </label>
     </form>
-    <!--<div class="header-actions">-->
-    <!--    <a href="..." class="nav-link nav-icon">-->
-    <!--        <clr-icon shape="cog"></clr-icon>-->
-    <!--    </a>-->
-    <!--</div>-->
+    <div class="header-actions">
+        <a href="/login" class="nav-link nav-text" (click)="logout()">
+            Log Out
+        </a>
+    </div>
 </header>
 <div class="row">
     <div class="col-xs-3">
@@ -22,26 +22,30 @@
     </div>
     <div class="col-xs-6">
         <span>
-            {{price}}<br>
-            {{symbol}}<br>
-            {{percentChange}}
+            <div id="currentPrice" *ngIf="symbolClicked">
+                <h2>{{price}}</h2><br>
+                <h4 *ngIf="symbol">{{symbol.toUpperCase()}}</h4><br>
+                <h3>{{percentChange}}</h3>
+            </div>
         </span>
         <span>
-          <div class="row">
-          <div style="display: block;">
-            <canvas baseChart width="750px" height="550px" 
-                        [datasets]="lineChartData"
-                        [labels]="lineChartLabels"
-                        [options]="lineChartOptions"
-                        [colors]="lineChartColors"
-                        [legend]="lineChartLegend"
-                        [chartType]="lineChartType"
-                        (chartHover)="chartHovered($event)"
-                        (chartClick)="chartClicked($event)"></canvas>
-          </div>
-          </div>
+            <ul id="chartViews" *ngIf="symbolClicked">
+                <li><a href="#">1D</a></li>
+                <li><a href="#">1W</a></li>
+                <li><a href="#">3M</a></li>
+                <li><a href="#">6M</a></li>
+                <li><a href="#">1Y</a></li>
+                <li><a href="#">5Y</a></li>
+                <li><a href="#">MAX</a></li>
+            </ul>
         </span>
-    </div>
+        <!--(chartHover)="chartHovered($event)"-->
+        <canvas baseChart width="750px" height="550px"
+                [data]="lineChartData"
+                [labels]="lineChartLabels"
+                [options]="lineChartOptions"
+                [colors]="lineChartColors"
+                [chartType]="lineChartType"></canvas>
     <div class="col-xs-3">
         <span></span>
     </div>

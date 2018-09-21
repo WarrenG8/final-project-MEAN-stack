@@ -7,3 +7,36 @@ img {
     width: 30px;
     margin-right: 10px;
 }
+
+.btn btn-primary {
+    background-color: #313131;
+}
+
+#chartViews {
+    list-style: none;
+    text-align: center;
+}
+#chartViews li{
+    display: inline;
+}
+
+#chartViews a{
+    display: inline-block;
+    padding: 20px;
+}
+
+.table {
+	display: table;   /* Allow the centering to work */
+	margin: 0 auto;
+}
+
+/*#horizontal-list {*/
+/*	list-style: none;*/
+	
+/*}*/
+
+/*#horizontal-list li{*/
+/*	display: inline;*/
+/*	padding: 20px;*/
+/*	min-width: 696px;*/
+/*}*/
