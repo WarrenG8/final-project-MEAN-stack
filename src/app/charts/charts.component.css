@@ -25,18 +25,18 @@ img {
     padding: 20px;
 }
 
-.table {
-	display: table;   /* Allow the centering to work */
-	margin: 0 auto;
+#currentPrice  {
+    height: 105px;
+    text-align: center;
 }
 
-/*#horizontal-list {*/
-/*	list-style: none;*/
-	
-/*}*/
+.currentPriceElem  {
+    display: inline;
+    padding: 35px;
+}
 
-/*#horizontal-list li{*/
-/*	display: inline;*/
-/*	padding: 20px;*/
-/*	min-width: 696px;*/
-/*}*/
+#please {
+    text-align: center;
+}
+
+

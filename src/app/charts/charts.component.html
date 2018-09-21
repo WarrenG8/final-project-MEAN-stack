@@ -1,6 +1,6 @@
 <header class="header-1">
     <div class="branding">
-        <a href="..." class="nav-link">
+        <a class="nav-link">
             <img src="src/app/images/b-logo.jpg">
             <span class="title">Bloomberg Stock Lookup</span>
         </a>
@@ -23,9 +23,9 @@
     <div class="col-xs-6">
         <span>
             <div id="currentPrice" *ngIf="symbolClicked">
-                <h2>{{price}}</h2><br>
-                <h4 *ngIf="symbol">{{symbol.toUpperCase()}}</h4><br>
-                <h3>{{percentChange}}</h3>
+                <h4 class="currentPriceElem" *ngIf="symbol">{{symbol.toUpperCase()}}</h4>
+                <h2 class="currentPriceElem">{{price}}</h2>
+                <h3 class="currentPriceElem">{{percentChange}}</h3>
             </div>
         </span>
         <span>
@@ -40,7 +40,8 @@
             </ul>
         </span>
         <!--(chartHover)="chartHovered($event)"-->
-        <canvas baseChart width="750px" height="550px"
+        <h3 *ngIf="!symbolClicked" id="please">Please select a stock symbol</h3>
+        <canvas baseChart width="750px" height="450px" *ngIf="symbolClicked"
                 [data]="lineChartData"
                 [labels]="lineChartLabels"
                 [options]="lineChartOptions"
