@@ -9,8 +9,8 @@ import {UserService} from '../user.service';
 })
 export class LoginComponent implements OnInit {
   user: any = {
-    "email": "",
-    "password": ""
+    email: "",
+    password: ""
   };
 
   constructor(public userService : UserService, private router: Router) { }
@@ -20,7 +20,7 @@ export class LoginComponent implements OnInit {
   
   toLogin(user) {
     console.log(this.user);
-    this.userService.login({"email": this.user.email, "password": this.user.password})
+    this.userService.login(this.user)
     .subscribe((res) => {
       console.log(res);
       this.userService.toHomePage(res)

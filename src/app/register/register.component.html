@@ -1,33 +1,19 @@
-<div class="row">
-    <div class="col-xs-4">
-    </div>
-    <div class="col-xs-4">
-        <form>
-            <section class="form-block">
-                <label>Register for an account</label>
-                <div class="form-group">
-                    <label for="aForm_1">First Name</label>
-                    <input type="text" id="aForm_1" name="firstName" placeholder="Enter first name" size="35" [(ngModel)]="user.firstName" >
-                </div>
-                <div class="form-group">
-                    <label for="aForm_2">Last Name</label>
-                    <input type="text" id="aForm_2" name="lastName" placeholder="Enter last name" size="35" [(ngModel)]="user.lastName">
-                </div>
-                <div class="form-group">
-                    <label for="aForm_3">Email</label>
-                    <input type="email" id="aForm_3" name="email" placeholder="Enter your email address" size="35" [(ngModel)]="user.email">
-                </div>
-                <div class="form-group">
-                    <label for="aForm_4">Password</label>
-                    <input type="password" id="aForm_4" name="password" placeholder="Enter a password" size="35" [(ngModel)]="user.password">
-                </div>
-                <button type="submit" (click)="onRegister()" class="btn btn-primary">Submit</button>
-            </section>
-        </form>
-    </div>
-    <div class="col-xs-4">
-    </div>
+<div class="login-wrapper">
+    <form class="login">
+        <section class="title">
+            <h3 class="welcome">Welcome to</h3>
+            Bloomberg Stock Lookup
+            <h5 class="hint">Please enter the required fields and click register</h5>
+        </section>
+        <div class="login-group">
+            <input type="text" id="register-firstName" name="firstName" placeholder="Enter first name" size="35" [(ngModel)]="user.firstName" >
+            <input type="text" id="register-lastName" name="lastName" placeholder="Enter last name" size="35" [(ngModel)]="user.lastName">
+            <input type="email" id="register-email" name="email" placeholder="Enter your email address" size="35" [(ngModel)]="user.email">
+            <input type="password" id="register-password" name="password" placeholder="Enter a password" size="35" [(ngModel)]="user.password">
+            <button type="submit" (click)="onRegister()" class="btn btn-primary" id="login">Register</button>
+            <a (click)="toLogin()" class="signup">Aleady have an account? Login instead.</a>
+        </div>
+    </form>
 </div>
-
 
 

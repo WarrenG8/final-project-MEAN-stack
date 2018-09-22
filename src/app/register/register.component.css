@@ -1,8 +1,17 @@
-/*form {*/
-/*    display: grid;*/
-/*    grid-template-columns: 510px 515px 510px;*/
-/*}*/
+.login-wrapper {
+    background: url(../images/login-page-logo.jpg);
+    /*background: none;*/
+    /*background-color: black;*/
+    background-position: 36.5em 11em;
+    background-repeat: no-repeat;
+    /*font-family: Nunito;*/
+}
 
-/*.form-block {*/
-/*    grid-column: 2/3;*/
-/*}*/
+#login{
+    background-color: #313131;
+}
+
+.login-group {
+    padding-bottom: 10px;
+    padding-top: 10px;
+}

@@ -21,6 +21,8 @@ export class ChartsComponent  {
   pricesArr2;
   timeSeries;
   symbolClicked: boolean = false;
+  newLineChartLabels;
+  iterator;
   // intraday: string = 'function=TIME_SERIES_INTRADAY';
   // daily: string = 'function=TIME_SERIES_DAILY';
   // weekly: string = "function=TIME_SERIES_WEEKLY";
@@ -32,15 +34,15 @@ export class ChartsComponent  {
   }
   
   public lineChartData:Array<any> = [];
-  public lineChartLabels:Array<any> = [];
+  public lineChartLabels:Array<any> = Array.from(Array(60)).map(() => '');
   
   public lineChartType:string = 'line';
   
   public lineChartColors:Array<any> = [
-    { // grey
-      backgroundColor: 'rgba(148,159,177,0.2)',
-      borderColor: 'rgba(148,159,177,1)',
-      pointBackgroundColor: 'rgba(148,159,177,1)',
+    { 
+      backgroundColor: '#cbe9db',
+      borderColor: '#0F9D58',
+      pointBackgroundColor: '#0F9D58',
       pointBorderColor: '#fff',
       pointHoverBackgroundColor: '#fff',
       pointHoverBorderColor: 'rgba(148,159,177,0.8)'
@@ -51,7 +53,7 @@ export class ChartsComponent  {
     legend: {
       display: false,
         labels: {
-          display: false
+          display: false,
         }
     }
   }  
@@ -61,15 +63,20 @@ export class ChartsComponent  {
     console.log(this.symbol);
     this.stk.getData(this.symbol)
     .subscribe(res => {
-      // let currentDay = moment().format("YYYY-MM-DD");
+      // if 1st view line chart data should come from intraday url
+        // lineChartData should be equal to      
+      let currentDay = moment().format("YYYY-MM-DD");
       let yesterday = moment().subtract(1, 'day').format("YYYY-MM-DD");
       let dayBefore = moment().subtract(2, 'day').format("YYYY-MM-DD");
       // this.symbol = res["Meta Data"]["2. Symbol"];
-      this.price = '$' + Number(res["Time Series (Daily)"][yesterday]["4. close"]).toFixed(2);
-      this.percentChange = (((res["Time Series (Daily)"][yesterday]["4. close"]- res["Time Series (Daily)"][dayBefore]["4. close"])/ res["Time Series (Daily)"][dayBefore]["4. close"]) * 100).toFixed(2) + '%';
-      this.lineChartData = Object.keys(res["Time Series (Daily)"]).map(key => Number(res["Time Series (Daily)"][key]["4. close"]).toFixed(2)).reverse();
+      this.price = '$' + Number(res["Time Series (Daily)"][currentDay]["4. close"]).toFixed(2);
+      this.percentChange = (((res["Time Series (Daily)"][currentDay]["4. close"]- res["Time Series (Daily)"][yesterday]["4. close"])/ res["Time Series (Daily)"][yesterday]["4. close"]) * 100).toFixed(2) + '%';
+      
+      this.lineChartData = Object.keys(res["Time Series (Daily)"]).map(key => Number(res["Time Series (Daily)"][key]["4. close"])).reverse();
+      console.log(this.lineChartData);
       console.log(Object.keys(res["Time Series (Daily)"]).reverse());
-      // this.lineChartLabels = Object.keys(res["Time Series (Daily)"]).reverse();
+      this.lineChartLabels = Object.keys(res["Time Series (Daily)"]).reverse();
+      console.log(this.lineChartLabels);
       console.log(res)
       }, err => {
         console.log(err)

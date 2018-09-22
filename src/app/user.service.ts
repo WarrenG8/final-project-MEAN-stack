@@ -12,18 +12,25 @@ export class UserService {
   password;
   returnUrl: string = "charts";
   
-  url: string = "http://mean-stack-charlie-2018-warren-phortonssf.c9users.io:8080/api/AppUsers?access_token=1209600000";
+  
+  url: string = "http://mean-stack-charlie-2018-warren-phortonssf.c9users.io:8080/api/AppUsers";
   
 
   constructor(private http: HttpClient, private router: Router) { }
   
   
-  login(user){
-    return this.http.post(this.url, user);
+  login(data){
+    return this.http.post(this.url + '/login', data);
   }
   
   register(user){
     return this.http.post(this.url, user);
+  }
+  
+  logout(){
+    let token = sessionStorage.getItem("token");
+    window.sessionStorage.clear();
+    return this.http.post(this.url + '/logout?access_token=' + token, {});
   }
   
   toHomePage(resData){
