@@ -1,10 +1,7 @@
 .login-wrapper {
     background: url(../images/login-page-logo.jpg);
-    /*background: none;*/
-    /*background-color: black;*/
     background-position: 36.5em 11em;
     background-repeat: no-repeat;
-    /*font-family: Nunito;*/
 }
 
 #login{

@@ -34,7 +34,7 @@ export class ChartsComponent  {
   }
   
   public lineChartData:Array<any> = [];
-  public lineChartLabels:Array<any> = Array.from(Array(60)).map(() => '');
+  public lineChartLabels:Array<any> = [];
   
   public lineChartType:string = 'line';
   
@@ -69,13 +69,15 @@ export class ChartsComponent  {
       let yesterday = moment().subtract(1, 'day').format("YYYY-MM-DD");
       let dayBefore = moment().subtract(2, 'day').format("YYYY-MM-DD");
       // this.symbol = res["Meta Data"]["2. Symbol"];
-      this.price = '$' + Number(res["Time Series (Daily)"][currentDay]["4. close"]).toFixed(2);
-      this.percentChange = (((res["Time Series (Daily)"][currentDay]["4. close"]- res["Time Series (Daily)"][yesterday]["4. close"])/ res["Time Series (Daily)"][yesterday]["4. close"]) * 100).toFixed(2) + '%';
+      this.price = '$' + Number(res["Time Series (Daily)"][yesterday]["4. close"]).toFixed(2);
+      this.percentChange = (((res["Time Series (Daily)"][yesterday]["4. close"]- res["Time Series (Daily)"][dayBefore]["4. close"])/ res["Time Series (Daily)"][dayBefore]["4. close"]) * 100).toFixed(2) + '%';
       
       this.lineChartData = Object.keys(res["Time Series (Daily)"]).map(key => Number(res["Time Series (Daily)"][key]["4. close"])).reverse();
       console.log(this.lineChartData);
       console.log(Object.keys(res["Time Series (Daily)"]).reverse());
-      this.lineChartLabels = Object.keys(res["Time Series (Daily)"]).reverse();
+      let tempLabels = Object.keys(res["Time Series (Daily)"]).reverse();
+      this.lineChartLabels.length = 0;
+      this.lineChartLabels.push(...tempLabels);
       console.log(this.lineChartLabels);
       console.log(res)
       }, err => {
