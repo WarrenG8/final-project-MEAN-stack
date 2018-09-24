@@ -6,9 +6,8 @@
         </a>
     </div>
     <form class="search">
-        <label for="search_input" (click)="searchSymbol()">
-            <input id="search_input" type="text" name="symbol" size="25" placeholder="Search by symbol..." [(ngModel)]="symbol">
-        </label>
+        <label for="search_input" (click)="searchSymbol()"></label>
+        <input id="search_input" (keyup.enter)="searchSymbol()" type="text" name="symbol" size="25" placeholder="Search by symbol..." [(ngModel)]="symbol">
     </form>
     <div class="header-actions">
         <a href="/login" class="nav-link nav-text" (click)="logout()">
@@ -18,25 +17,27 @@
 </header>
 <div class="row">
     <div class="col-xs-3">
-        <span></span>
+        <h3 id="head">Favorites</h3>
+        <h4 class="stkFav" *ngFor="let stk of this.favArr">{{stk.stock}}</h4>
     </div>
     <div class="col-xs-6">
         <span>
             <div id="currentPrice" *ngIf="symbolClicked">
                 <h4 class="currentPriceElem" *ngIf="symbol">{{symbol.toUpperCase()}}</h4>
                 <h2 class="currentPriceElem">{{price}}</h2>
-                <h3 class="currentPriceElem">{{percentChange}}</h3>
+                <h3 class="currentPriceElem">{{percentChange}}</h3><br>
+                <button class="btn btn-outline" (click)="addToFav()">Add to Favorites</button>
             </div>
         </span>
         <span>
             <ul id="chartViews" *ngIf="symbolClicked">
-                <li><a href="#">1D</a></li>
-                <li><a href="#">1W</a></li>
-                <li><a href="#">3M</a></li>
-                <li><a href="#">6M</a></li>
-                <li><a href="#">1Y</a></li>
-                <li><a href="#">5Y</a></li>
-                <li><a href="#">MAX</a></li>
+                <li><a (click)="searchSymbol()">1D</a></li>
+                <li><a (click)="searchSymbol()">1W</a></li>
+                <li><a (click)="searchSymbol()">3M</a></li>
+                <li><a (click)="searchSymbol()">6M</a></li>
+                <li><a (click)="searchSymbol()">1Y</a></li>
+                <li><a (click)="searchSymbol()">5Y</a></li>
+                <li><a (click)="searchSymbol()">MAX</a></li>
             </ul>
         </span>
         <!--(chartHover)="chartHovered($event)"-->

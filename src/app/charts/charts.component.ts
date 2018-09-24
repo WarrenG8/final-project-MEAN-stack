@@ -21,20 +21,21 @@ export class ChartsComponent  {
   pricesArr2;
   timeSeries;
   symbolClicked: boolean = false;
-  newLineChartLabels;
-  iterator;
-  // intraday: string = 'function=TIME_SERIES_INTRADAY';
-  // daily: string = 'function=TIME_SERIES_DAILY';
-  // weekly: string = "function=TIME_SERIES_WEEKLY";
-  // monthly: string = "function=TIME_SERIES_MONTHLY_ADJUSTED";
+  intraday: string = 'function=TIME_SERIES_INTRADAY';
+  daily: string = 'function=TIME_SERIES_DAILY';
+  weekly: string = "function=TIME_SERIES_WEEKLY";
+  monthly: string = "function=TIME_SERIES_MONTHLY_ADJUSTED";
+  favArr;
+  favorite: any = {};
   
   
   constructor(private stk: StockService, public userService : UserService, private router: Router) {
-    
+    this.getFavorites();
   }
   
   public lineChartData:Array<any> = [];
-  public lineChartLabels:Array<any> = [];
+  public lineChartLabels:Array<any> = [
+  ];
   
   public lineChartType:string = 'line';
   
@@ -60,19 +61,20 @@ export class ChartsComponent  {
   
   searchSymbol() {
     this.symbolClicked = true;
-    console.log(this.symbol);
-    this.stk.getData(this.symbol)
+    
+    this.stk.getMonthData(this.symbol)
     .subscribe(res => {
       // if 1st view line chart data should come from intraday url
-        // lineChartData should be equal to      
+        // lineChartData should be equal to     
+      
+      
       let currentDay = moment().format("YYYY-MM-DD");
       let yesterday = moment().subtract(1, 'day').format("YYYY-MM-DD");
       let dayBefore = moment().subtract(2, 'day').format("YYYY-MM-DD");
-      // this.symbol = res["Meta Data"]["2. Symbol"];
-      this.price = '$' + Number(res["Time Series (Daily)"][yesterday]["4. close"]).toFixed(2);
-      this.percentChange = (((res["Time Series (Daily)"][yesterday]["4. close"]- res["Time Series (Daily)"][dayBefore]["4. close"])/ res["Time Series (Daily)"][dayBefore]["4. close"]) * 100).toFixed(2) + '%';
-      
-      this.lineChartData = Object.keys(res["Time Series (Daily)"]).map(key => Number(res["Time Series (Daily)"][key]["4. close"])).reverse();
+      let beforeThat = moment().subtract(2, 'day').format("YYYY-MM-DD");
+      this.price = '$' + Number(res["Time Series (Daily)"][dayBefore]["4. close"]).toFixed(2);
+      this.percentChange = (((res["Time Series (Daily)"][dayBefore]["4. close"]- res["Time Series (Daily)"][beforeThat]["4. close"])/ res["Time Series (Daily)"][beforeThat]["4. close"]) * 100).toFixed(2) + '%';
+      this.lineChartData = Object.keys(res["Time Series (Daily)"]).map(key => Number(res["Time Series (Daily)"][key]["4. close"]).toFixed(2)).reverse();
       console.log(this.lineChartData);
       console.log(Object.keys(res["Time Series (Daily)"]).reverse());
       let tempLabels = Object.keys(res["Time Series (Daily)"]).reverse();
@@ -93,13 +95,26 @@ export class ChartsComponent  {
     });
   }
   
+  addToFav(){
+    this.favorite.stock = this.symbol.toUpperCase();
+    this.favorite.userId = window.sessionStorage.getItem("userId");
+    
+    this.userService.addToFavorites(this.favorite)
+    .subscribe((res) => {
+      console.log(res);
+    });
+  }
+  
+  getFavorites() {
+    this.userService.getFavorites()
+    .subscribe((res) => {
+      this.favArr = res;
+      console.log(res);
+    });
+  }
   
   
   ngOnInit() {
   }
-  
-  // public chartHovered(e:any):void {
-  //   console.log(e);
-  // }
 
 }

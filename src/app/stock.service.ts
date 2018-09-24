@@ -14,8 +14,8 @@ export class StockService {
   intraday: string = 'function=TIME_SERIES_INTRADAY';
   daily: string = 'function=TIME_SERIES_DAILY';
   weekly: string = "function=TIME_SERIES_WEEKLY";
-  monthly: string = "function=TIME_SERIES_MONTHLY_ADJUSTED";
-  
+  dayViewInt: string = 'interval=5min';
+  weekViewInt: string = 'interval=15min';
   
   // url1DayView: string = "https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol=MSFT&interval=5min&apikey=NKQMMWPSW3I1OPE6";
   // url1WeekView: string = "https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol=MSFT&interval=15min&apikey=NKQMMWPSW3I1OPE6";
@@ -25,19 +25,17 @@ export class StockService {
   
   constructor(private http: HttpClient) { }
   
-  getData(symbol){
-    // let complete = this.url + this.daily + '&' + 'symbol=' + symbol + this.api;
-    // console.log(complete);
-    return this.http.get(this.url + this.daily + '&symbol=' + symbol + this.api);
+  get1DayData(symbol){
+    return this.http.get(this.url + this.intraday  + '&symbol=' + symbol + this.dayViewInt + this.api);
   }
   
-  // get1WeekViewData(){
-  //   return this.http.get(this.url1WeekView);
-  // }
+  get1WeekData(symbol){
+    return this.http.get(this.url + this.intraday  + '&symbol=' + symbol + this.weekViewInt + this.api);
+  }
   
-  // getDailyData(){
-  //   return this.http.get(this.urlDaily);
-  // }
+  getMonthData(symbol){
+    return this.http.get(this.url + this.daily  + '&symbol=' + symbol + this.api);
+  }
   
   // getWeeklyData(){
   //   return this.http.get(this.urlWeekly);
