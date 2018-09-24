@@ -40,7 +40,6 @@
                 <li><a (click)="searchSymbol()">MAX</a></li>
             </ul>
         </span>
-        <!--(chartHover)="chartHovered($event)"-->
         <h3 *ngIf="!symbolClicked" id="please">Please select a stock symbol</h3>
         <canvas baseChart width="750px" height="450px" *ngIf="symbolClicked"
                 [data]="lineChartData"
