@@ -95,16 +95,6 @@ export class ChartsComponent  {
     });
   }
   
-  addToFav(){
-    this.favorite.stock = this.symbol.toUpperCase();
-    this.favorite.userId = window.sessionStorage.getItem("userId");
-    
-    this.userService.addToFavorites(this.favorite)
-    .subscribe((res) => {
-      console.log(res);
-    });
-  }
-  
   getFavorites() {
     this.userService.getFavorites()
     .subscribe((res) => {
@@ -113,6 +103,19 @@ export class ChartsComponent  {
     });
   }
   
+  addToFav(){
+    let newFav = this.symbol.toUpperCase();
+    if(this.favArr.findIndex(stk => stk.stock === newFav) >= 0) {
+      alert('This stock has already been added to your favorites.')
+    } else {
+    this.favorite.stock = newFav;
+    this.favorite.userId = window.sessionStorage.getItem("userId");
+    this.userService.addToFavorites(this.favorite)
+    .subscribe((res) => {
+      console.log(res);
+    });
+    }
+  }
   
   ngOnInit() {
   }
