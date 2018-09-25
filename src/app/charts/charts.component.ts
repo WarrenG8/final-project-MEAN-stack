@@ -164,9 +164,10 @@ export class ChartsComponent  {
     let dataFilter = 64;
     this.stk.getMonthToYearData(this.symbolSaved)
     .subscribe(res => {
-        this.currentPrice(res);
-        this.displayGraph(res, timeSeries, dataFilter);
-        this.symbol = '';
+      this.currentPrice(res);
+      this.displayGraph(res, timeSeries, dataFilter);
+      this.symbol = '';
+      this.isFavorite();
       console.log(res)
       }, err => {
         console.log(err)
@@ -204,17 +205,18 @@ export class ChartsComponent  {
   }
   
   removeFromFav() {
-    let fav = this.symbol.toUpperCase();
-    if(this.favArr.findIndex(stk => stk.stock === fav) < 0) {
-      alert('This stock has already been added to your favorites.')
-    } else {
-    this.favorite.stock = fav;
-    this.favorite.userId = window.sessionStorage.getItem("userId");
-    this.userService.addToFavorites(this.favorite)
-    .subscribe((res) => {
-      console.log(res);
-    });
-    }
+    let fav = this.symbolSaved;
+    let idx = this.favArr.findIndex(stk => stk.stock === fav);
+    console.log(idx);
+    let toBeRemoved = this.favArr[idx].id;
+    console.log(toBeRemoved);
+    this.userService.deleteFromFavorites(toBeRemoved)
+    .subscribe((res) => console.log(res));
+    setTimeout( _ => this.getFavorites(), 1000 );
+  }
+  
+  isFavorite(){
+    return this.favArr.findIndex(stk => stk.stock === this.symbolSaved) >= 0;
   }
   
   ngOnInit() {

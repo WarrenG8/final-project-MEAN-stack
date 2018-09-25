@@ -27,7 +27,8 @@
                 <h4 class="currentPriceElem" *ngIf="symbolSaved">{{symbolSaved.toUpperCase()}}</h4>
                 <h2 class="currentPriceElem">{{price}}</h2>
                 <h3 class="currentPriceElem">{{percentChange}}</h3><br>
-                <button class="btn btn-outline" (click)="addToFav()">Add to Favorites</button>
+                <button class="btn btn-outline" (click)="addToFav()" *ngIf="!isFavorite()">Add to Favorites</button>
+                <button class="btn btn-outline" (click)="removeFromFav()" *ngIf="isFavorite()">Remove from Favorites</button>
             </div>
         </span>
         <div id="chartView">

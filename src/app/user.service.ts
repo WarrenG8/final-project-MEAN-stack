@@ -54,8 +54,7 @@ export class UserService {
   
   deleteFromFavorites(data){
     let token = window.sessionStorage.getItem("token");
-    let id = window.sessionStorage.getItem("userId");
-    return this.http.delete(this.url + '/' + id + '/favorites?access_token='+ token, data); 
+    return this.http.delete('http://mean-stack-charlie-2018-warren-phortonssf.c9users.io:8080/api/favorites/' + data + '?access_token='+ token,  {}); 
   }
   
 }
