@@ -11,7 +11,6 @@ import { EventEmitter, Output } from '@angular/core';
   styleUrls: ['./charts.component.css']
 })
 export class ChartsComponent  {
-  pricesArr;
   symbol;
   symbolSaved;
   user;
@@ -200,7 +199,7 @@ export class ChartsComponent  {
       this.favArr.push(newFav);
       this.userService.addToFavorites(this.favorite)
       .subscribe((res) => console.log(res));
-      this.getFavorites();
+      setTimeout( _ => this.getFavorites(), 1000 );
     }
   }
   
