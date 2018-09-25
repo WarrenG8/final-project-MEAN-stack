@@ -52,4 +52,10 @@ export class UserService {
     return this.http.post(this.url + '/' + id + '/favorites?access_token='+ token, data); 
   }
   
+  deleteFromFavorites(data){
+    let token = window.sessionStorage.getItem("token");
+    let id = window.sessionStorage.getItem("userId");
+    return this.http.delete(this.url + '/' + id + '/favorites?access_token='+ token, data); 
+  }
+  
 }

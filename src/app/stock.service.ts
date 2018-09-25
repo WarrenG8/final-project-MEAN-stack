@@ -14,7 +14,6 @@ export class StockService {
   intraday: string = 'function=TIME_SERIES_INTRADAY';
   daily: string = 'function=TIME_SERIES_DAILY';
   weekly: string = "function=TIME_SERIES_WEEKLY";
-  dayViewInt: string = 'interval=5min';
   weekViewInt: string = 'interval=15min';
   
   // url1DayView: string = "https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol=MSFT&interval=5min&apikey=NKQMMWPSW3I1OPE6";
@@ -26,23 +25,23 @@ export class StockService {
   constructor(private http: HttpClient) { }
   
   get1DayData(symbol){
-    return this.http.get(this.url + this.intraday  + '&symbol=' + symbol + this.dayViewInt + this.api);
+    return this.http.get(this.url + this.intraday  + '&symbol=' + symbol + '&interval=5min'+ this.api);
   }
   
   get1WeekData(symbol){
-    return this.http.get(this.url + this.intraday  + '&symbol=' + symbol + this.weekViewInt + this.api);
+    return this.http.get(this.url + this.intraday  + '&symbol=' + symbol + '&interval=30min' + this.api);
   }
   
   getMonthData(symbol){
-    return this.http.get(this.url + this.daily  + '&symbol=' + symbol + this.api);
+    return this.http.get(this.url + this.daily  + '&symbol=' + symbol + '&outputsize=full' + this.api);
   }
   
-  // getWeeklyData(){
-  //   return this.http.get(this.urlWeekly);
-  // }
+  get5YearData(symbol) {
+    return this.http.get(this.url + this.weekly  + '&symbol=' + symbol + this.api);
+  }
   
-  // getMonthlyData(){
-  //   return this.http.get(this.urlMonthly);
-  // }
+  getCrypto(symbol) {
+    return this.http.get(this.url + 'function=DIGITAL_CURRENCY_DAILY'  + '&symbol=' + symbol + this.api);
+  }
   
 }

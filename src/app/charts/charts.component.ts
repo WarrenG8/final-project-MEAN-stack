@@ -3,6 +3,7 @@ import { StockService } from '../stock.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import {UserService} from '../user.service';
 import * as moment from 'moment';
+import { EventEmitter, Output } from '@angular/core';
 
 @Component({
   selector: 'app-charts',
@@ -11,24 +12,17 @@ import * as moment from 'moment';
 })
 export class ChartsComponent  {
   pricesArr;
-  dates;
-  times;
-  pricesWeek;
   symbol;
+  symbolSaved;
   user;
   price;
   percentChange;
-  pricesArr2;
-  timeSeries;
   currentDay;
   dayBefore;
   symbolClicked: boolean = false;
-  intraday: string = 'function=TIME_SERIES_INTRADAY';
-  daily: string = 'function=TIME_SERIES_DAILY';
-  weekly: string = "function=TIME_SERIES_WEEKLY";
-  monthly: string = "function=TIME_SERIES_MONTHLY_ADJUSTED";
   favArr;
   favorite: any = {};
+  removeFav: any = {};
   
   
   constructor(private stk: StockService, public userService : UserService, private router: Router) {
@@ -76,24 +70,85 @@ export class ChartsComponent  {
     }
   }
   
-  searchSymbol() {
-    this.symbolClicked = true;
-    
-    this.stk.getMonthData(this.symbol)
+  dayView(){
+    console.log(this.symbolSaved);
+    this.stk.get1DayData(this.symbolSaved)
     .subscribe(res => {
-      console.log(this.currentDay);
-      console.log(this.dayBefore);
-      // if 1st view line chart data should come from intraday url
-        // lineChartData should be equal to     
-      this.price = '$' + Number(res["Time Series (Daily)"][this.currentDay]["4. close"]).toFixed(2);
-      this.percentChange = (((res["Time Series (Daily)"][this.currentDay]["4. close"]- res["Time Series (Daily)"][this.dayBefore]["4. close"])/ res["Time Series (Daily)"][this.dayBefore]["4. close"]) * 100).toFixed(2) + '%';
-      this.lineChartData = Object.keys(res["Time Series (Daily)"]).map(key => Number(res["Time Series (Daily)"][key]["4. close"]).toFixed(2)).reverse();
-      console.log(this.lineChartData);
-      console.log(Object.keys(res["Time Series (Daily)"]).reverse());
-      let tempLabels = Object.keys(res["Time Series (Daily)"]).reverse();
+      this.lineChartData = Object.keys(res["Time Series (5min)"]).map(key => Number(res["Time Series (5min)"][key]["4. close"]).toFixed(2)).filter((x, idx) => idx < 88).reverse();
+      let tempLabels = Object.keys(res["Time Series (5min)"]).filter((x, idx) => idx < 88).reverse();
       this.lineChartLabels.length = 0;
       this.lineChartLabels.push(...tempLabels);
-      console.log(this.lineChartLabels);
+      console.log(res)
+      }, err => {
+        console.log(err)
+      })
+  }
+  
+  weekView(){
+    this.stk.get1WeekData(this.symbolSaved)
+    .subscribe(res => {
+      this.lineChartData = Object.keys(res["Time Series (30min)"]).map(key => Number(res["Time Series (30min)"][key]["4. close"]).toFixed(2)).filter((x, idx) => idx < 48).reverse();
+      let tempLabels = Object.keys(res["Time Series (30min)"]).filter((x, idx) => idx < 48).reverse();
+      this.lineChartLabels.length = 0;
+      this.lineChartLabels.push(...tempLabels);
+      console.log(res)
+      }, err => {
+        console.log(err)
+      })
+  }
+  
+  sixMonthView(){
+    this.stk.getMonthData(this.symbolSaved)
+    .subscribe(res => {
+      this.lineChartData = Object.keys(res["Time Series Daily"]).map(key => Number(res["Time Series Daily"][key]["4. close"]).toFixed(2)).filter((x, idx) => idx < 127).reverse();
+      let tempLabels = Object.keys(res["Time Series Daily"]).filter((x, idx) => idx < 127).reverse();
+      this.lineChartLabels.length = 0;
+      this.lineChartLabels.push(...tempLabels);
+      console.log(res)
+      }, err => {
+        console.log(err)
+      })
+  }
+  
+  yearView(){
+    this.stk.getMonthData(this.symbolSaved)
+    .subscribe(res => {
+      this.lineChartData = Object.keys(res["Time Series Daily"]).map(key => Number(res["Time Series Daily"][key]["4. close"]).toFixed(2)).filter((x, idx) => idx < 253).reverse();
+      let tempLabels = Object.keys(res["Time Series Daily"]).filter((x, idx) => idx < 253).reverse();
+      this.lineChartLabels.length = 0;
+      this.lineChartLabels.push(...tempLabels);
+      console.log(res)
+      }, err => {
+        console.log(err)
+      })
+  }
+  
+  fiveYearView(){
+    console.log(this.symbolSaved);
+    this.stk.get5YearData(this.symbolSaved)
+    .subscribe(res => {
+      this.lineChartData = Object.keys(res["Weekly Time Series"]).map(key => Number(res["Weekly Time Series"][key]["4. close"]).toFixed(2)).filter((x, idx) => idx < 263).reverse();
+      let tempLabels = Object.keys(res["Weekly Time Series"]).filter((x, idx) => idx < 263).reverse();
+      this.lineChartLabels.length = 0;
+      this.lineChartLabels.push(...tempLabels);
+      console.log(res)
+      }, err => {
+        console.log(err)
+      })
+  }
+
+  searchSymbol() {
+    this.symbolClicked = true;
+    this.symbolSaved = this.symbol.toUpperCase();
+    this.stk.getMonthData(this.symbol)
+    .subscribe(res => {
+        this.price = '$' + Number(res["Time Series (Daily)"][this.currentDay]["4. close"]).toFixed(2);
+        this.percentChange = (((res["Time Series (Daily)"][this.currentDay]["4. close"]- res["Time Series (Daily)"][this.dayBefore]["4. close"])/ res["Time Series (Daily)"][this.dayBefore]["4. close"]) * 100).toFixed(2) + '%';
+        this.lineChartData = Object.keys(res["Time Series (Daily)"]).map(key => Number(res["Time Series (Daily)"][key]["4. close"]).toFixed(2)).filter((x, idx) => idx < 127).reverse();
+        let tempLabels = Object.keys(res["Time Series (Daily)"]).filter((x, idx) => idx < 127).reverse();
+        this.lineChartLabels.length = 0;
+        this.lineChartLabels.push(...tempLabels);
+        this.symbol = '';
       console.log(res)
       }, err => {
         console.log(err)
@@ -122,6 +177,22 @@ export class ChartsComponent  {
       alert('This stock has already been added to your favorites.')
     } else {
     this.favorite.stock = newFav;
+    this.favorite.userId = window.sessionStorage.getItem("userId");
+    this.favArr.push(newFav);
+    this.userService.addToFavorites(this.favorite)
+    .subscribe((res) => {
+      console.log(res);
+    });
+  }
+    
+  }
+  
+  removeFromFav() {
+    let fav = this.symbol.toUpperCase();
+    if(this.favArr.findIndex(stk => stk.stock === fav) < 0) {
+      alert('This stock has already been added to your favorites.')
+    } else {
+    this.favorite.stock = fav;
     this.favorite.userId = window.sessionStorage.getItem("userId");
     this.userService.addToFavorites(this.favorite)
     .subscribe((res) => {
