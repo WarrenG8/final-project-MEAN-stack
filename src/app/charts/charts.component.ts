@@ -56,6 +56,8 @@ export class ChartsComponent  {
     }
   }  
   
+ 
+  
   dateGen() {
     let today = moment();
     if(today === moment().isoWeekday("Sunday") || today === moment().isoWeekday("Saturday")) {
@@ -70,14 +72,25 @@ export class ChartsComponent  {
     }
   }
   
+  currentPrice(res) {
+    this.price = '$' + Number(res["Time Series (Daily)"][this.currentDay]["4. close"]).toFixed(2);
+    this.percentChange = (((res["Time Series (Daily)"][this.currentDay]["4. close"]- res["Time Series (Daily)"][this.dayBefore]["4. close"])/ res["Time Series (Daily)"][this.dayBefore]["4. close"]) * 100).toFixed(2) + '%';
+  }
+  
+  displayGraph(res, timeSeries, dataFilter) {
+    this.lineChartData = Object.keys(res[timeSeries]).map(key => Number(res[timeSeries][key]["4. close"]).toFixed(2)).filter((x, idx) => idx < dataFilter).reverse();
+    let tempLabels = Object.keys(res[timeSeries]).filter((x, idx) => idx < dataFilter).reverse();
+    this.lineChartLabels.length = 0;
+    this.lineChartLabels.push(...tempLabels);
+  }
+  
   dayView(){
     console.log(this.symbolSaved);
+    let timeSeries = "Time Series (5min)";
+    let dataFilter = 88;
     this.stk.get1DayData(this.symbolSaved)
     .subscribe(res => {
-      this.lineChartData = Object.keys(res["Time Series (5min)"]).map(key => Number(res["Time Series (5min)"][key]["4. close"]).toFixed(2)).filter((x, idx) => idx < 88).reverse();
-      let tempLabels = Object.keys(res["Time Series (5min)"]).filter((x, idx) => idx < 88).reverse();
-      this.lineChartLabels.length = 0;
-      this.lineChartLabels.push(...tempLabels);
+      this.displayGraph(res, timeSeries, dataFilter);
       console.log(res)
       }, err => {
         console.log(err)
@@ -85,12 +98,23 @@ export class ChartsComponent  {
   }
   
   weekView(){
+    let timeSeries = "Time Series (30min)";
+    let dataFilter = 48;
     this.stk.get1WeekData(this.symbolSaved)
     .subscribe(res => {
-      this.lineChartData = Object.keys(res["Time Series (30min)"]).map(key => Number(res["Time Series (30min)"][key]["4. close"]).toFixed(2)).filter((x, idx) => idx < 48).reverse();
-      let tempLabels = Object.keys(res["Time Series (30min)"]).filter((x, idx) => idx < 48).reverse();
-      this.lineChartLabels.length = 0;
-      this.lineChartLabels.push(...tempLabels);
+      this.displayGraph(res, timeSeries, dataFilter);
+      console.log(res)
+      }, err => {
+        console.log(err)
+      })
+  }
+  
+  threeMonthView() {
+    let timeSeries = "Time Series (Daily)";
+    let dataFilter = 64;
+    this.stk.getMonthToYearData(this.symbolSaved)
+    .subscribe(res => {
+      this.displayGraph(res, timeSeries, dataFilter);
       console.log(res)
       }, err => {
         console.log(err)
@@ -98,12 +122,11 @@ export class ChartsComponent  {
   }
   
   sixMonthView(){
-    this.stk.getMonthData(this.symbolSaved)
+    let timeSeries = "Time Series (Daily)";
+    let dataFilter = 253;
+    this.stk.getMonthToYearData(this.symbolSaved)
     .subscribe(res => {
-      this.lineChartData = Object.keys(res["Time Series Daily"]).map(key => Number(res["Time Series Daily"][key]["4. close"]).toFixed(2)).filter((x, idx) => idx < 127).reverse();
-      let tempLabels = Object.keys(res["Time Series Daily"]).filter((x, idx) => idx < 127).reverse();
-      this.lineChartLabels.length = 0;
-      this.lineChartLabels.push(...tempLabels);
+      this.displayGraph(res, timeSeries, dataFilter);
       console.log(res)
       }, err => {
         console.log(err)
@@ -111,13 +134,12 @@ export class ChartsComponent  {
   }
   
   yearView(){
-    this.stk.getMonthData(this.symbolSaved)
+    let timeSeries = "Time Series (Daily)";
+    let dataFilter = 253;
+    this.stk.getMonthToYearData(this.symbolSaved)
     .subscribe(res => {
-      this.lineChartData = Object.keys(res["Time Series Daily"]).map(key => Number(res["Time Series Daily"][key]["4. close"]).toFixed(2)).filter((x, idx) => idx < 253).reverse();
-      let tempLabels = Object.keys(res["Time Series Daily"]).filter((x, idx) => idx < 253).reverse();
-      this.lineChartLabels.length = 0;
-      this.lineChartLabels.push(...tempLabels);
-      console.log(res)
+      this.displayGraph(res, timeSeries, dataFilter);
+      console.log(res);
       }, err => {
         console.log(err)
       })
@@ -125,12 +147,11 @@ export class ChartsComponent  {
   
   fiveYearView(){
     console.log(this.symbolSaved);
+    let timeSeries = "Weekly Time Series";
+    let dataFilter = 263;
     this.stk.get5YearData(this.symbolSaved)
     .subscribe(res => {
-      this.lineChartData = Object.keys(res["Weekly Time Series"]).map(key => Number(res["Weekly Time Series"][key]["4. close"]).toFixed(2)).filter((x, idx) => idx < 263).reverse();
-      let tempLabels = Object.keys(res["Weekly Time Series"]).filter((x, idx) => idx < 263).reverse();
-      this.lineChartLabels.length = 0;
-      this.lineChartLabels.push(...tempLabels);
+      this.displayGraph(res, timeSeries, dataFilter);
       console.log(res)
       }, err => {
         console.log(err)
@@ -140,14 +161,12 @@ export class ChartsComponent  {
   searchSymbol() {
     this.symbolClicked = true;
     this.symbolSaved = this.symbol.toUpperCase();
-    this.stk.getMonthData(this.symbol)
+    let timeSeries = "Time Series (Daily)";
+    let dataFilter = 64;
+    this.stk.getMonthToYearData(this.symbolSaved)
     .subscribe(res => {
-        this.price = '$' + Number(res["Time Series (Daily)"][this.currentDay]["4. close"]).toFixed(2);
-        this.percentChange = (((res["Time Series (Daily)"][this.currentDay]["4. close"]- res["Time Series (Daily)"][this.dayBefore]["4. close"])/ res["Time Series (Daily)"][this.dayBefore]["4. close"]) * 100).toFixed(2) + '%';
-        this.lineChartData = Object.keys(res["Time Series (Daily)"]).map(key => Number(res["Time Series (Daily)"][key]["4. close"]).toFixed(2)).filter((x, idx) => idx < 127).reverse();
-        let tempLabels = Object.keys(res["Time Series (Daily)"]).filter((x, idx) => idx < 127).reverse();
-        this.lineChartLabels.length = 0;
-        this.lineChartLabels.push(...tempLabels);
+        this.currentPrice(res);
+        this.displayGraph(res, timeSeries, dataFilter);
         this.symbol = '';
       console.log(res)
       }, err => {
@@ -172,19 +191,17 @@ export class ChartsComponent  {
   }
   
   addToFav(){
-    let newFav = this.symbol.toUpperCase();
+    let newFav = this.symbolSaved.toUpperCase();
     if(this.favArr.findIndex(stk => stk.stock === newFav) >= 0) {
       alert('This stock has already been added to your favorites.')
     } else {
-    this.favorite.stock = newFav;
-    this.favorite.userId = window.sessionStorage.getItem("userId");
-    this.favArr.push(newFav);
-    this.userService.addToFavorites(this.favorite)
-    .subscribe((res) => {
-      console.log(res);
-    });
-  }
-    
+      this.favorite.stock = newFav;
+      this.favorite.userId = window.sessionStorage.getItem("userId");
+      this.favArr.push(newFav);
+      this.userService.addToFavorites(this.favorite)
+      .subscribe((res) => console.log(res));
+      this.getFavorites();
+    }
   }
   
   removeFromFav() {

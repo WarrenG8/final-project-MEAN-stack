@@ -32,7 +32,7 @@ export class StockService {
     return this.http.get(this.url + this.intraday  + '&symbol=' + symbol + '&interval=30min' + this.api);
   }
   
-  getMonthData(symbol){
+  getMonthToYearData(symbol){
     return this.http.get(this.url + this.daily  + '&symbol=' + symbol + '&outputsize=full' + this.api);
   }
   
