@@ -18,12 +18,13 @@
 <div class="row">
     <div class="col-xs-2">
         <h3 class="head">Favorites</h3>
-        <h4 class="stkFav" *ngFor="let stk of this.favArr">{{stk.stock}}</h4>
+        <h4 class="stkFav" *ngFor="let stk of favArr"><a (click)="selectFavorite(stk.stock)" id="{{stk.stock}}">{{stk.stock}}</a></h4>
     </div>
     <div class="col-xs-6">
-        <h3 *ngIf="!symbolClicked" id="please">Please select a stock symbol</h3>
+        <h3 *ngIf="loading()" class="please">Loading.....</h3>
+        <h3 *ngIf="!loading() && !symbolClicked" class="please">Please select a stock symbol</h3>
         <span>
-            <div id="currentPrice" *ngIf="symbolClicked">
+            <div id="currentPrice" *ngIf="symbolClicked && !loading()">
                 <h4 class="currentPriceElem" *ngIf="symbolSaved">{{symbolSaved.toUpperCase()}}</h4>
                 <h2 class="currentPriceElem">{{price}}</h2>
                 <h3 class="currentPriceElem">{{percentChange}}</h3><br>
@@ -31,9 +32,9 @@
                 <button class="btn btn-outline" (click)="removeFromFav()" *ngIf="isFavorite()">Remove from Favorites</button>
             </div>
         </span>
-        <div id="chartView">
+        <div id="chartView" *ngIf="symbolClicked && !loading()">
             <span>
-                <ul id="chartViews" *ngIf="symbolClicked">
+                <ul id="chartViews">
                     <li><a (click)="dayView()">1D</a></li>
                     <li><a (click)="weekView()">1W</a></li>
                     <li><a (click)="threeMonthView()">3M</a></li>
