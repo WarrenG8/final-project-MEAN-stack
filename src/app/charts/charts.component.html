@@ -16,8 +16,8 @@
     </div>
 </header>
 <div class="row">
-    <div class="col-xs-3">
-        <h3 id="head">Favorites</h3>
+    <div class="col-xs-2">
+        <h3 class="head">Favorites</h3>
         <h4 class="stkFav" *ngFor="let stk of this.favArr">{{stk.stock}}</h4>
     </div>
     <div class="col-xs-6">
@@ -49,7 +49,14 @@
                     [colors]="lineChartColors"
                     [chartType]="lineChartType"></canvas>
         </div>
-    <div class="col-xs-3">
-        <span></span>
+    </div>
+    <div class="col-xs-4">
+        <div id="cryptoView">
+            <h3 class="head">Cryptocurrency</h3>
+                <div class="cryptos"*ngFor="let crypto of this.cryptos">
+                    <h4>{{crypto.name}}</h4>
+                    <h4 class="cryptoPrice">{{crypto.price}}</h4>
+                </div>
+        </div>
     </div>
 </div>

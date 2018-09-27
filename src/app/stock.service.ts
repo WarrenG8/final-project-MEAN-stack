@@ -14,13 +14,7 @@ export class StockService {
   intraday: string = 'function=TIME_SERIES_INTRADAY';
   daily: string = 'function=TIME_SERIES_DAILY';
   weekly: string = "function=TIME_SERIES_WEEKLY";
-  weekViewInt: string = 'interval=15min';
   
-  // url1DayView: string = "https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol=MSFT&interval=5min&apikey=NKQMMWPSW3I1OPE6";
-  // url1WeekView: string = "https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol=MSFT&interval=15min&apikey=NKQMMWPSW3I1OPE6";
-  // urlDaily: string = "https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=MSFT&apikey=NKQMMWPSW3I1OPE6";
-  // urlWeekly: string = "https://www.alphavantage.co/query?function=TIME_SERIES_WEEKLY&symbol=MSFT&apikey=NKQMMWPSW3I1OPE6";
-  // urlMonthly: string = "https://www.alphavantage.co/query?function=TIME_SERIES_MONTHLY_ADJUSTED&symbol=MSFT&apikey=NKQMMWPSW3I1OPE6";
   
   constructor(private http: HttpClient) { }
   
@@ -40,8 +34,9 @@ export class StockService {
     return this.http.get(this.url + this.weekly  + '&symbol=' + symbol + this.api);
   }
   
-  getCrypto(symbol) {
-    return this.http.get(this.url + 'function=DIGITAL_CURRENCY_DAILY'  + '&symbol=' + symbol + this.api);
+  getCrypto() {
+    return this.http.get('https://min-api.cryptocompare.com/data/pricemulti?fsyms=BTC,ETH,BCH,LTC,ETC&tsyms=USD');
   }
+  
   
 }

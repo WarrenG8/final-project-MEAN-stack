@@ -22,11 +22,15 @@ export class ChartsComponent  {
   favArr;
   favorite: any = {};
   removeFav: any = {};
+  cryptoPrices;
+  
   
   
   constructor(private stk: StockService, public userService : UserService, private router: Router) {
     this.getFavorites();
     this.dateGen();
+    this.cryptoPrice();
+    setTimeout( _ => this.cryptos.map(x => x.price = '$' + this.cryptoPrices[x.sym]['USD'].toFixed(2)), 1500 );
   }
   
   public lineChartData:Array<any> = [];
@@ -72,15 +76,29 @@ export class ChartsComponent  {
   }
   
   currentPrice(res) {
+    if(!res.hasOwnProperty("Meta Data")) {
+      alert('API is slow. Please try again.');
+    } else {
     this.price = '$' + Number(res["Time Series (Daily)"][this.currentDay]["4. close"]).toFixed(2);
     this.percentChange = (((res["Time Series (Daily)"][this.currentDay]["4. close"]- res["Time Series (Daily)"][this.dayBefore]["4. close"])/ res["Time Series (Daily)"][this.dayBefore]["4. close"]) * 100).toFixed(2) + '%';
+    this.changePosOrNeg();
+    }  
+  }
+  
+  changePosOrNeg() {
+    return this.percentChange > 0; 
   }
   
   displayGraph(res, timeSeries, dataFilter) {
-    this.lineChartData = Object.keys(res[timeSeries]).map(key => Number(res[timeSeries][key]["4. close"]).toFixed(2)).filter((x, idx) => idx < dataFilter).reverse();
-    let tempLabels = Object.keys(res[timeSeries]).filter((x, idx) => idx < dataFilter).reverse();
-    this.lineChartLabels.length = 0;
-    this.lineChartLabels.push(...tempLabels);
+    if(!res.hasOwnProperty("Meta Data")) {
+      alert('API is slow. Please try again.');
+    } else {
+      this.lineChartData = Object.keys(res[timeSeries]).map(key => Number(res[timeSeries][key]["4. close"]).toFixed(2)).filter((x, idx) => idx < dataFilter).reverse();
+      let tempLabels = Object.keys(res[timeSeries]).filter((x, idx) => idx < dataFilter).reverse();
+      this.lineChartLabels.length = 0;
+      this.lineChartLabels.push(...tempLabels);
+    }
+    
   }
   
   dayView(){
@@ -110,7 +128,7 @@ export class ChartsComponent  {
   
   threeMonthView() {
     let timeSeries = "Time Series (Daily)";
-    let dataFilter = 64;
+    let dataFilter = 65;
     this.stk.getMonthToYearData(this.symbolSaved)
     .subscribe(res => {
       this.displayGraph(res, timeSeries, dataFilter);
@@ -122,7 +140,7 @@ export class ChartsComponent  {
   
   sixMonthView(){
     let timeSeries = "Time Series (Daily)";
-    let dataFilter = 253;
+    let dataFilter = 128;
     this.stk.getMonthToYearData(this.symbolSaved)
     .subscribe(res => {
       this.displayGraph(res, timeSeries, dataFilter);
@@ -161,7 +179,7 @@ export class ChartsComponent  {
     this.symbolClicked = true;
     this.symbolSaved = this.symbol.toUpperCase();
     let timeSeries = "Time Series (Daily)";
-    let dataFilter = 64;
+    let dataFilter = 65;
     this.stk.getMonthToYearData(this.symbolSaved)
     .subscribe(res => {
       this.currentPrice(res);
@@ -219,7 +237,27 @@ export class ChartsComponent  {
     return this.favArr.findIndex(stk => stk.stock === this.symbolSaved) >= 0;
   }
   
+  cryptoPrice() {
+    this.stk.getCrypto()
+    .subscribe((res) => {
+      this.cryptoPrices = res;
+      console.log(res);
+      console.log(this.cryptoPrices);
+    }, err => {
+      console.log(err);
+    });
+  }
+  
+  cryptos = [
+    {'name' :'Bitcoin', 'sym': 'BTC', 'price': ''}, 
+    {'name':'Bitcoin Cash', 'sym': 'BCH', 'price': ''}, 
+    {'name': 'Ethereum', 'sym': 'ETH', 'price': ''}, 
+    {'name' : 'Ethereum Cash', 'sym': 'ETC', 'price': ''},
+    {'name' : 'Litecoin', 'sym': 'LTC', 'price': ''},
+  ];
+  
   ngOnInit() {
   }
-
+  
+  
 }

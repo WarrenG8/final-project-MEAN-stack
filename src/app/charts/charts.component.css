@@ -44,11 +44,23 @@ img {
     text-align: center;
 }
 
-#head {
+.head {
     text-align: center;
 }
 
 .stkFav {
     text-align: center;
 }
+
+#cryptoView {
+    padding-right: 50px;
+}
+
+.cryptos {
+    display: flex; 
+    justify-content: space-between;
+}
+
+/*changePos*/
+
 
