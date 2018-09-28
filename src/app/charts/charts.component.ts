@@ -76,13 +76,9 @@ export class ChartsComponent  {
   }
   
   currentPrice(res) {
-    if(!res.hasOwnProperty("Meta Data")) {
-      alert('API is slow. Please wait a few seconds and try again.');
-    } else {
     this.price = '$' + Number(res["Time Series (Daily)"][this.currentDay]["4. close"]).toFixed(2);
     this.percentChange = (((res["Time Series (Daily)"][this.currentDay]["4. close"]- res["Time Series (Daily)"][this.dayBefore]["4. close"])/ res["Time Series (Daily)"][this.dayBefore]["4. close"]) * 100).toFixed(2) + '%';
     this.changePosOrNeg();
-    }  
   }
   
   changePosOrNeg() {
@@ -90,7 +86,10 @@ export class ChartsComponent  {
   }
   
   displayGraph(res, timeSeries, dataFilter) {
-    if(!res.hasOwnProperty("Meta Data")) {
+    if(res.hasOwnProperty("Error Message")) {
+      this.symbolClicked = false;
+      alert('Please enter in a valid stock symbol.');
+    } else if (!res.hasOwnProperty("Meta Data") && res.hasOwnProperty("Information")) {
       alert('API is slow. Please wait a few seconds and try again.');
     } else {
       this.lineChartData = Object.keys(res[timeSeries]).map(key => Number(res[timeSeries][key]["4. close"]).toFixed(2)).filter((x, idx) => idx < dataFilter).reverse();
@@ -192,21 +191,20 @@ export class ChartsComponent  {
       let dataFilter = 65;
       this.stk.getMonthToYearData(this.symbolSaved)
       .subscribe(res => {
-        // if(!res.hasOwnProperty("Meta Data") || !res.hasOwnProperty("Information")) {
-        //   this.symbolClicked = false;
-        //   this.symbol = '';
-        //   alert('Symbol was not found. Please try again with a legit symbol.');
-        // } else {
+        if(res.hasOwnProperty("Error Message")) {
+          this.symbolClicked = false;
+          alert('Please enter in a valid stock symbol.');
+        } else if (!res.hasOwnProperty("Meta Data")) {
+          this.symbolClicked = false;
+          alert('API is slow. Please wait a few seconds and try again.');
+        } else
           this.currentPrice(res);
           this.displayGraph(res, timeSeries, dataFilter);
           this.symbol = '';
           this.isFavorite();
-          console.log(res)
-        // }
-        
-        });
+          console.log(res);
+      });
     }
-    
   }
   
   logout(){

@@ -9,7 +9,7 @@ export class StockService {
   symbol;
   
   url: string = 'https://www.alphavantage.co/query?';
-  api: string = '&apikey=GW0R8V7AOR0F6JQI';
+  api: string = '&apikey=GLVGWD2KPK1NNRA8';
   
   intraday: string = 'function=TIME_SERIES_INTRADAY';
   daily: string = 'function=TIME_SERIES_DAILY';
